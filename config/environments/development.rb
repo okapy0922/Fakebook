@@ -32,6 +32,9 @@ Rails.application.configure do
   config.assets.digest = true
 
   # Adds additional error checking when serving assets at runtime.
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+  config.action_mailer.delivery_method = :letter_opener_web
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true

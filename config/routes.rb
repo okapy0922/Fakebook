@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  devise_for :users
    resources :blogs, only: [:index, :new, :create, :edit, :destroy, :update] do
      collection do
        post :confirm
@@ -13,7 +15,11 @@ Rails.application.routes.draw do
    end
 
  root 'top#index'
+ if Rails.env.development?
 
+   mount LetterOpenerWeb::Engine, at: "/letter_opener"
+
+ end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -52,7 +58,6 @@ Rails.application.routes.draw do
   #     resources :comments
   #     resources :sales do
   #       get 'recent', on: :collection
-  #     end
   #   end
 
   # Example resource route with concerns:
