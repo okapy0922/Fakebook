@@ -2,6 +2,7 @@ class ContactsController < ApplicationController
 
   def index
     @contacts = Contact.all#テーブルにある全てのデータを取得
+
   end
 
   def new

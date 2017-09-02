@@ -1,18 +1,24 @@
+#   get 'products/:id' => 'catalog#view'
 Rails.application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
    resources :blogs, only: [:index, :new, :create, :edit, :destroy, :update] do
      collection do
        post :confirm
      end
    end
 
-   resources :contacts, only: [:new, :create]do
+   resources :contacts, only: [:new, :create] do
      collection do
       post :confirm
      end
    end
+
+   resources :poems, only: [:index, :show]
 
  root 'top#index'
  if Rails.env.development?
@@ -27,7 +33,6 @@ Rails.application.routes.draw do
   # root 'welcome#index'
 
   # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

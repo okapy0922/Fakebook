@@ -4,15 +4,16 @@ class BlogsController < ApplicationController
 
   def index
     @blogs = Blog.all#テーブルにある全てのデータを取得
+
   end
 
   def new
     if params[:back]
-        @blog = Blog.new(blogs_params)
-      else
-    @blog = Blog.new#@インスタンス変数であることを宣言。Blog.newとすることでインスタンス生成
+      @blog = Blog.new(blogs_params)
+    else
+      @blog = Blog.new#@インスタンス変数であることを宣言。Blog.newとすることでインスタンス生成
+    end
   end
-end
 
   def create
   @blog = Blog.new(blogs_params)
