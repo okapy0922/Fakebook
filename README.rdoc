@@ -1,28 +1,238 @@
-== うんこREADME
+Ruby メモ
+--------------------------------------------
+★コメントアウトについて
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+・パーセントのカッコ区切り<%=　%>のなかで#～で以降が一行コメントされる
+・rbファイルは#△コメント内容(△はインデント1つの意味)
+・erbファイルは<!--コメント内容書く-->
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+★インデント 幅2つ
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+★rails　重要な3大機能　MVCモデル
+
+Model[モデル]：　Controllerの指令をもとにデータ操作を実行
+View「ビュー」：　Controllerから渡された情報をもとにHTMLを生成する
+Controller「コントローラー」：　データの操作、指令　中心の役割
+この順番で処理が動く？
+
+★ブログの4大機能　CRUD クラッド
+
+Create　新規作成
+Read　表示する
+Update　更新
+Destroy　削除
+
+★eachメソッド
+配列や範囲オブジェクトなどで用意されているメソッドであり、オブジェクトに
+含まれている要素を順番に取り出してくれる。繰り返し処理のRuby版。
+
+★データ型
+・integerは数字のみ入れられる
+・stringは文字列のみ入れられる
+
+★controllerとviewの関係
+
+～コントローラーでビューに反映させる情報を決めてる～
+
+#コントローラー直下のホニャララcontroller.rb
+
+def index
+  @poems = Poem.all   #Poemデータを取得、変数poemsに入れる
+
+#ビュー直下のホニャララindex
+
+<% @poems.each do |poem| %>   #縦線で区切られた色poemはpoemsをpoemとしますよーの意味らしい
+<td><%= poem.content %></td>
+<td><%= poem.auther %></td>
+
+----------------------------
+～Railsターミナル画面のコマンド～
+
+★新しいプロジェクト(アプリケーションの土台を作成する)を作成(workspaceを作ってその配下で実行)
+
+rails new プロジェクト名 -d postgresql
+
+★railsサーバ　動作確認
+rails s -b 0.0.0.0
+
+http://localhost:3000/
+
+★gemファイルのインストール
+bundle install
+
+★リダイレクト先の確認コマンド
+rake　routes
+
+★マイグレーションファイルの実行コマンド
+rake db:migrate
+
+★テーブルの全削除
+rake db:reset
+
+★databaseを一度削除してもう一度作成し、db:migrate実行
+rake db:migrate:reset
+
+★作成したuserテーブルを作成前の状態に戻す
+rake db:rollback
+
+★シードデータの実行コマンド
+rake db:seed
+
+★生成コマンド
+rails　generate（rails　g）
+
+各種ファイル生成（MVCモデル）Model,View,Controller
+rails　g　scaffold
+Ex.)rails g model blog title:string content:text
+→マイグレーションファイルにtitleとcontentを追加
+
+★処理を停止させるコード内の記述
+binding.pry（Rubyメソッド）
+
+Viewとかで使うとき <% binding.pry %>
+※ただし、gemファイル「pry-rails」をインストールしないと使えない
+
+★シャットダウン(仮想環境終了)
+shutdown -h
+
+コンソールでサーバ起動
+
+※を記述したアクションのページまで画面を遷移
+→処理が止まる
+
+★consoleコマンド
+ターミナル画面でRailsアプリケーションとやり取りすることができる
+rails　c
+
+~consoleコマンド集~
+入力して実行すると実行結果が反映される
+
+・「モデル名.メソッド」
+
+ex.)
+Blog.all　ブログ全部表示
+User.count　ユーザ数カウント
+Blog.delete.all　ブログ全削除
+
+---------------------------------------------------------------
+■ログイン機能実装
+①devise初期設定、gemfileに追記
+gem 'devise'
+
+②ターミナルコマンドの実行、初期設定のファイル生成
+rails generate devise:install
+
+③devise用モデル、マイグレーションファイル生成
+rails generate devise user
+
+④マイグレーション実行
+rake db:migrate
+
+----------------------------------------------------------------
+～GitHub実行コマンド～
+
+■GitHubからローカルへクローン(複製)を持ってくる
+
+git clone "GitHubでコピペしたSSH protcolURLを貼り付け"
+
+■Git初期化(最初の一回のみ実行)
+git init
+
+■ソースコードをリポジトリに保存(-Aで全フォルダを指定、削除したファイルも含める)
+git add -A
+
+■保存を実行
+git commit -m "どのような作業を行ったか作業名を書く"
+
+■保存を実行した履歴の確認
+git log
+
+■ソースコードをGitHubへ送信
+git push [コピーしたsshプロトコルURL]
+
+---------------------------------------------------------------
+
+■HEROKU アセットプリコンパイル(※はじめてのHerokuデプロイ前に必ず実行)
+
+1.config/environments/production.rbファイル
+コード内：config.assets.compile = false → trueに変更
+2.ターミナル画面 → rake assets:precompile RAILS_ENV=production 実行
+3.ターミナル画面 → git commit -m "コミット内容（first_commitとか回数、改修した内容を書くのが良い）"  実行
+
+■HEROKUコマンド　デプロイ（ネットを通じてWEBアプリを使えるようにする）
+
+1.git add -A　全部追加
+2.git commit -m “コミットの内容”　”内容”把握できやすい命名
+3.git push heroku master　commitしたファイルをHEROKUへ送付
+4.heroku run rake db:migrate RAILS_ENV=production　HEROKUのマイグレーション実行
+
+■コミットしたファイルをHEROKUに送付するコマンド
+git push heroku master
+
+■HEROKU上でrailsコンソールコマンドを実行する
+
+heroku run rails c
+
+------------------------------------------------------------------
+用語
+
+★アソシエーション
+あるモデルと別のモデルを関連付けさせること。
+あるテーブルのデータに紐づく
+別のテーブルのデータを得られるような
+アプリケーションを作成するときに使う。
+
+例.)とあるユーザが書いたブログを不特定多数が見られるような仕組みを作るとき
+
+※従来では、テーブル間のレコード結合をDBMS(データベース管理システム)に対して
+SQL文でテーブル結合を実行してきた。
+
+・2つのモデル
+hoge.rbとfuga.rbを結びつけるアソシエーションの例
+
+belongs_to :hoge
+has_many :fuga
+
+hogeテーブルとfugaテーブルレコードが結びつく
+
+・アソシエーション3種類
+1. AモデルとBモデルが1対1で結びついている
+2. AモデルとBモデルが1対多数で結びついている
+3. AモデルとBモデルが多対多で結びついている
+
+
+
+
+★バリデーション
+
+これを追加しないと不正な値でも正しく処理されてしまう
+そのためバリデーション機能を追加する。
+
+validates :カラム名（titleとかcontent）, presence: true
+
+★jQuery
+$ドルマークから始まる箇所。
+JavaScriptを簡単に使えるようにするライブラリのこと。
+
+★CoffeeScript
+JavaScript「JS」の拡張言語。
+JSよりもコード文が短く、実行時にJSに変換され出力される。
+rubyではCoffeeScriptを使う
+
+★<% binding.pry %>
+コード内に書くことで記載した場所までの処理とすることができる。（処理を意図的に止める）
+
+★エラー画面の設定
+
+config/environments/development.rb
+
+config.consider_all_requests_local = true
+→エラー出る、falseで作成したエラー画面表示
+
+
+★API
+Application Programming Interface
+アプリケーションを連携できるようにさせる
+外部からアプリケーションの機能を追加させること
+ただし内部のコードまでは公開できない
