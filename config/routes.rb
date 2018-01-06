@@ -1,81 +1,68 @@
-#   get 'products/:id' => 'catalog#view'
 Rails.application.routes.draw do
+
+  get 'notifications/index'
+
+  resources :blogs do # blogsのrouting
+    resources :comments
+    collection do
+      post :confirm
+    end
+  end
+
+  resources :contacts, only: [:new, :create] do # contactsのrouting
+    collection do
+      post :confirm
+    end
+  end
+
+  # SNSログイン,ルーティング定義の追加
+  # 新規登録する際に、継承したregistration_controllerが
+  # 使用されるようにする
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   devise_for :users, controllers: {
     registrations: "users/registrations",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-   resources :blogs, only: [:index, :new, :create, :edit, :destroy, :update] do
-     collection do
-       post :confirm
-     end
-   end
 
-   resources :contacts, only: [:new, :create] do
-     collection do
-      post :confirm
-     end
-   end
+  # フォロー機能
+  # ユーザー一覧ページを作成する
+  # devise_for より下に記述する必要がある(ルーティングがログイン後のマイページになってしまう)
+  # 不要なrouting get 'users/index'を削除、routingをresourcesへ書き直し 2017.11/11
+  resources :users, only: [:index, :show]
+  # タスク管理機能 タスクを作成するcreateアクションとタスクを削除するdestroyアクションへのroutingを作成
+  resources :tasks
+  # タスク依頼を受信する一覧ページのrouting作成
+  resources :submit_requests do
+    # submit_request/inboxというrouting
+    get 'inbox', on: :collection
+    # 依頼受信ページからタスク依頼に対して、承認と却下ができるようにする
+    member do
+      patch 'approve'
+      patch 'reject'
+    end
+  end
 
-   resources :poems, only: [:index, :show]
+  # フォローをする、やめるの機能のルーティング（フォロー関係を作成するcreateアクションと削除するdestroyアクションへのroutingを作成）
+  resources :relationships, only: [:create, :destroy]
 
- root 'top#index'
- if Rails.env.development?
+  resources :poems, only: [:index, :show]
 
-   mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  # メッセージ機能のrouting、conversations内にmessagesがネストされたものを定義
+  resources :conversations do
 
- end
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+    resources :messages
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  end
 
-  # Example of regular route:
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+  # トップページ
+  root 'top#index'
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  # 11_メール送信
+  # 開発環境だとメールを送れない
+  # 発信したかどうかを確認するツールを利用できるようにする
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
 end

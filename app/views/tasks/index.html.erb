@@ -1,0 +1,40 @@
+<div class="container">
+  <p><%= notice %></p>
+  <h1>タスク管理リスト</h1>
+
+  <div = "row">
+    <div class="task col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12 table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>依頼人</th>
+            <th>タイトル</th>
+            <th>タスク</th>
+            <th>締め切り</th>
+            <th>仕事人</th>
+            <th>進捗</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @tasks.each do |task| %>
+          <tr>
+            <td><%= task.user.name %></td>
+            <td><%= task.title %></td>
+            <td><%= task.content %></td>
+            <td><%= task.deadline.strftime("%Y年%m月%d日 %H時%M分") %></td>
+            <td><%= task.charge.name %></td>
+            <td><%= task.status %></td>
+            <td><%= link_to 'タスク詳細', task %></td>
+            <td><%= link_to '編集', edit_task_path(task) %></td>
+            <td><%= link_to '削除', task, method: :delete, data: { confirm: '削除しますか?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= link_to 'New Task', new_task_path(@user), class: "btn btn-default"%>
+    </div>
+  </div>
+</div>
+<br>

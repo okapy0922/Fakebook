@@ -4,19 +4,84 @@ Ruby メモ
 
 ・パーセントのカッコ区切り<%=　%>のなかで#～で以降が一行コメントされる
 ・rbファイルは#△コメント内容(△はインデント1つの意味)
+・rbファイルの複数行コメント化
+
+=begin
+
+=end
+で囲まれた部分はコメントアウトされる。
+
 ・erbファイルは<!--コメント内容書く-->
 
 ★インデント 幅2つ
 
+・ATOM設定
+http://dormouse666.hatenablog.com/entry/2016/03/28/005857
+http://tech.machiiro.jp/entry/2016/10/31/104815
+
 
 ★rails　重要な3大機能　MVCモデル
 
-Model[モデル]：　Controllerの指令をもとにデータ操作を実行
-View「ビュー」：　Controllerから渡された情報をもとにHTMLを生成する
-Controller「コントローラー」：　データの操作、指令　中心の役割
-この順番で処理が動く？
+Model[モデル]：
+Controllerの指令をもとにデータ操作を実行(ロジックを記述)
 
-★ブログの4大機能　CRUD クラッド
+View「ビュー」：
+Controllerから渡された情報をもとにHTMLを生成する(Modelを表示)
+
+Controller「コントローラー」：
+データの操作、指令　中心の役割
+(Viewの入力受け取り、Modelを起動)
+
+1.最初は「V」
+画面の生成(プログラマはこの辺から作ってくイメージある)
+
+2.制御の「C」
+プログラム制御
+
+3.データ操作の「M」
+Rubyで書かれた制御文を
+SQLに翻訳しデータベースに命令出す
+
+～MVC全体の概要～
+
+①Router→Controller
+RouterはURLとHTTPメソッドをもとに
+どのコントローラアクションを
+実行するか選択する
+
+②Controller→Model
+Controllerから受けた命令、
+ModelがSQLに翻訳
+
+③Model→データベース
+Modelはデータベースに
+データ操作の命令を出す
+
+④データベース→Model
+Modelからの命令を受け
+結果をRubyに翻訳し直し返却
+
+⑤Model→Controller
+Modelは得た結果をControllerへ返却
+
+⑥Controller→View
+Contrlollerは得られた結果をViewへ渡す
+
+⑦View→Controller
+Viewは得た結果をもとにHTMLを生成、
+Controllerに返す
+
+→ControllerがレスポンスHTMLを返して
+処理完了
+
+※機能を作ってく順序としては
+1.必要な機能について要件をまとめる(要件定義)
+2.ルーティング設定
+3.rails g コマンドでMVC生成　rails g controller rails g model scafoldはMVCまとめて
+4.コントローラ、モデル、ビューの順番で作成、設定してく方が機能の大枠をとらえやすい気がする
+
+
+★主要なHTTPメソッド(ブログの4大機能)　CRUD クラッド
 
 Create　新規作成
 Read　表示する
@@ -46,6 +111,7 @@ def index
 <td><%= poem.content %></td>
 <td><%= poem.auther %></td>
 
+
 ----------------------------
 ～Railsターミナル画面のコマンド～
 
@@ -58,39 +124,87 @@ rails s -b 0.0.0.0
 
 http://localhost:3000/
 
+★開発環境_新規登録の認証メール
+
+localhost:3000/letter_opener
+
 ★gemファイルのインストール
 bundle install
 
-★リダイレクト先の確認コマンド
-rake　routes
+bundleで削除
+bundle exec gem uninstall gemname
 
-★マイグレーションファイルの実行コマンド
+
+★リダイレクト先の確認コマンド
+rake routes
+
+★マイグレーションファイルの実行コマンド(マイグレーションファイルを読み込む)
 rake db:migrate
+
+→マイグレーションファイルは指示書の役割
+これをもとにデータベースに反映している
+
+更新したテーブルが保管される場所(テーブルの状態を表している)
+db/migrate/schema.rb
 
 ★テーブルの全削除
 rake db:reset
 
-★databaseを一度削除してもう一度作成し、db:migrate実行
+★databaseを一度削除してもう一度作成し、db:migrate実行(おススメ)
+データベースをリセットして、マイグレーションを実行
 rake db:migrate:reset
 
 ★作成したuserテーブルを作成前の状態に戻す
 rake db:rollback
 
-★シードデータの実行コマンド
+★シードデータの実行コマンド(ダミーのユーザデータを作成する)
 rake db:seed
+
+gem 'faker'
+bundle install
+
+# db/seeds.rbに記述、10人分の架空の登録者を追加
+10.times do |n|
+  email = Faker::Internet.email
+password = "password"
+  User.create!(email: email,
+
+  password: password,
+  password_confirmation: password,
+  name: "テスト"
+               )
+end
 
 ★生成コマンド
 rails　generate（rails　g）
 
-各種ファイル生成（MVCモデル）Model,View,Controller
+★各種ファイル生成（MVCモデル）Model,View,Controller
 rails　g　scaffold
 Ex.)rails g model blog title:string content:text
 →マイグレーションファイルにtitleとcontentを追加
 
-★処理を停止させるコード内の記述
+コントローラとアクション、その他の必要なモデルや
+マイグレーションファイル、ビューファイル一式を作成してくれる
+
+★mailer生成
+rails g mailer "Mailer名"
+Ex.)rails g mailer NoticeMailer sendmail_blog
+→Mailer 「notice_mailer」を作成し、その中にsendmail_blogを定義する。
+
+★ブレークポイントを仕掛ける(処理を停止させるコード内の記述）
 binding.pry（Rubyメソッド）
 
-Viewとかで使うとき <% binding.pry %>
+Ex.)
+class BlogsController < ApplicationController
+
+  def index
+
+    @hoges = Hoge.all
+     binding.pry
+<!--サーバを立ち上げここでindexアクションにアクセスすると処理が止まる-->
+  end
+
+Viewとかで使うときは <% binding.pry %>
 ※ただし、gemファイル「pry-rails」をインストールしないと使えない
 
 ★シャットダウン(仮想環境終了)
@@ -115,6 +229,26 @@ Blog.all　ブログ全部表示
 User.count　ユーザ数カウント
 Blog.delete.all　ブログ全削除
 
+■データベース接続、データベースに対して直接確認
+rails dbconsole or rails db
+
+
+
+--------------------------------------------------------------
+■bootstrapでデザイン
+
+view layouts内の
+トップページのデザインを決めているファイル
+例.
+aplication.html.erb
+
+<div class="function-images">
+  <div class="col-md-3 col-sm-6"> # サイズ調整
+    <div class="function-image">
+      <img src="<%= asset_path "hoge.png" %>"> # 画面表示
+
+
+
 ---------------------------------------------------------------
 ■ログイン機能実装
 ①devise初期設定、gemfileに追記
@@ -128,6 +262,8 @@ rails generate devise user
 
 ④マイグレーション実行
 rake db:migrate
+
+
 
 ----------------------------------------------------------------
 ～GitHub実行コマンド～
@@ -151,21 +287,42 @@ git log
 ■ソースコードをGitHubへ送信
 git push [コピーしたsshプロトコルURL]
 
+■GitHubの管理下から除外する
+.gitignoreに対象のファイルを記述することで、
+gitの管理下から外す事が可能
+
+
+
 ---------------------------------------------------------------
 
-■HEROKU アセットプリコンパイル(※はじめてのHerokuデプロイ前に必ず実行)
+■HEROKU アセットプリコンパイル
+(※はじめてのHerokuデプロイ前、CSS更新時に必ず実行)
 
 1.config/environments/production.rbファイル
 コード内：config.assets.compile = false → trueに変更
 2.ターミナル画面 → rake assets:precompile RAILS_ENV=production 実行
+
 3.ターミナル画面 → git commit -m "コミット内容（first_commitとか回数、改修した内容を書くのが良い）"  実行
 
 ■HEROKUコマンド　デプロイ（ネットを通じてWEBアプリを使えるようにする）
 
 1.git add -A　全部追加
+
 2.git commit -m “コミットの内容”　”内容”把握できやすい命名
-3.git push heroku master　commitしたファイルをHEROKUへ送付
+
+3.rake assets:precompile RAILS_ENV=production アセットプリコンパイル
+app/asssetディレクトリ以下のファイルを編集したら実行する
+
+4.git push heroku master　commitしたファイルをHEROKUへ送付
+
+※3.でうまくいかないとき
+heroku git:remote -a　「heroku createして作ったpersonal apps名」
+
 4.heroku run rake db:migrate RAILS_ENV=production　HEROKUのマイグレーション実行
+→2回目以降「heroku rake db:migrate」でおｋ？
+heroku run rake db:migrate
+heroku run rake db:migrate:reset
+heroku restart
 
 ■コミットしたファイルをHEROKUに送付するコマンド
 git push heroku master
@@ -174,8 +331,28 @@ git push heroku master
 
 heroku run rails c
 
+
+
 ------------------------------------------------------------------
 用語
+
+★before_actionメソッド
+コントローラでの共通処理について
+
+複数のアクションで共通している処理`はメソッドにまとめることができる
+
+# 編集、更新、削除の機能を共通でまとめたbefore_actionメソッド
+
+class BlogsController < ApplicationController
+
+  before_action :set_blog, only: [:edit, :update, :destroy]
+
+# privateの中の定義
+
+def set_blog # set_blogの箇所は名前が異なるとNomethodErrorとなる
+
+  @blog = Blog.find(params[:id])
+
 
 ★アソシエーション
 あるモデルと別のモデルを関連付けさせること。
@@ -200,8 +377,6 @@ hogeテーブルとfugaテーブルレコードが結びつく
 1. AモデルとBモデルが1対1で結びついている
 2. AモデルとBモデルが1対多数で結びついている
 3. AモデルとBモデルが多対多で結びついている
-
-
 
 
 ★バリデーション
@@ -233,6 +408,78 @@ config.consider_all_requests_local = true
 
 ★API
 Application Programming Interface
-アプリケーションを連携できるようにさせる
+アプリケーションを連携できるようにさせたり
+別のアプリ上の情報を取得することができたりする
 外部からアプリケーションの機能を追加させること
 ただし内部のコードまでは公開できない
+
+～APIの流れ～　MVCモデルと異なる
+ControllerはModelからデータを受け取った後、
+Viewを経由せずそのままデータを返却
+
+Model
+→
+Contrloller
+→
+Router
+
+
+★JSON(JavaScript Object Notation)
+APIは性質上、データのみのやり取りを行っている
+そのフォーマットとしてJSON形式が使用される
+JSONはデータのみを表現するため	とても軽量らしい
+
+★アセットパイプライン
+複数のディレクトリやファイルに分かれた
+assetsディレクトリ内のファイルを
+1つに連結、圧縮する機能
+
+★オーバライド(継承？)
+オーバーライドとは、スーパークラスで定義されたメソッドをサブクラス側で同じ名前を使ってメソッドを新しく定義しなおすこと
+
+★インスタンスとは
+オブジェクト指向でよく出る
+クラス(設計図)を具現化した(実体)を指している
+
+常に変数に何が入っているのかを念頭に組む
+それができないとエラーになる
+
+・インスタンス変数：
+@変数名で表す
+例：
+@blog
+
+blogsコントローラに変数を定義してViewファイルにデータを渡すながれ
+
+
+class BlogsController < ApplicationController
+  def index
+  end
+
+  def new
+   @blog = Blog.new
+  end
+
+  def create
+  end
+end
+
+binding.pryの実行例
+
+
+class BlogsController < ApplicationController
+  def index
+  end
+  binding.pry
+  def new
+   @blog = Blog.new
+  end
+
+  def create
+  end
+end
+
+# 新規投稿ボタンを押したら処理が止まる、リクエストをコンソールで確認
+@blogの中身に何が入ってるか
+@blogを実行して中身が見られる
+nilは実体なし　何もないの意味

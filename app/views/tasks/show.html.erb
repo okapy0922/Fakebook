@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>依頼者:</strong>
+  <%= @task.user.name %>
+</p>
+
+<p>
+  <strong>タイトル:</strong>
+  <%= @task.title %>
+</p>
+
+<p>
+  <strong>依頼内容:</strong>
+  <%= @task.content %>
+</p>
+
+<p>
+  <strong>期限:</strong>
+  <!--strftimeメソッド 日付を整形して表示-->
+  <%= @task.deadline.strftime("%Y年%m月%d日 %H時%M分") %>
+</p>
+
+<p>
+  <strong>仕事人:</strong>
+  <%= @task.charge.name %>
+</p>
+
+<p>
+  <strong>進捗:</strong>
+  <%= @task.status %>
+</p>
+
+<%= link_to 'Edit', edit_task_path(@task) %> |
+<%= link_to 'Back', tasks_path %>

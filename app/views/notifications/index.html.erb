@@ -1,0 +1,19 @@
+<h2>お知らせ</h2>
+<ul>
+  <!--eachメソッド each doを使用ユーザ名を表示させる-->
+  <% @notifications.each do |notification| %>
+  <hr>
+
+  <li>
+    <span><%= notification.read %></span>
+    <p>
+      <%= notification.comment.user.try(:name) %>さんが
+      あなたのブログ（<%= link_to "#{notification.comment.blog.title}", blog_path(notification.comment.blog, notification_id: notification.id) %>）にコメントしました。
+    </p>
+
+    <p><%= notification.created_at %></p>
+
+  </li>
+
+  <% end %>
+</ul>

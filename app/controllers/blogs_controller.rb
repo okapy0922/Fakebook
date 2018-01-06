@@ -1,30 +1,29 @@
 class BlogsController < ApplicationController
   before_action :authenticate_user!
-
+  before_action :set_blog, only: [:show, :edit, :update, :destroy] # 11/4 showアクションも追加
 
   def index
-    @blogs = Blog.all#テーブルにある全てのデータを取得
-
+    @blogs = Blog.all # テーブルにある全てのデータを取得
   end
 
   def new
     if params[:back]
       @blog = Blog.new(blogs_params)
     else
-      @blog = Blog.new#@インスタンス変数であることを宣言。Blog.newとすることでインスタンス生成
+      @blog = Blog.new # @インスタンス変数であることを宣言。Blog.newとすることでインスタンス生成
     end
   end
 
   def create
-  @blog = Blog.new(blogs_params)
-  @blog.user_id = current_user.id
-    if @blog.save
-    # 一覧画面へ遷移して"ブログを作成しました！"とメッセージを表示します。
-    redirect_to blogs_path, notice: "ブログを作成しました！"
-    else
+    @blog = Blog.new(blogs_params)
+    @blog.user_id = current_user.id
+      if @blog.save
+      # 一覧画面へ遷移して"ブログを作成しました！"とメッセージを表示します。
+      redirect_to blogs_path, notice: "ブログを作成しました！"
+      else
     # 入力フォームを再描画します。
     render action: 'new'
-    end
+      end
   end
 
   def edit
@@ -55,13 +54,20 @@ class BlogsController < ApplicationController
   render :new if @blog.invalid?
   end
 
-  private
-      def blogs_params
-        params.require(:blog).permit(:title, :content)
-      end
+  # showアククションを定義します。入力フォームと一覧を表示するためインスタンスを2つ生成します。
+  def show
+    @comment = @blog.comments.build
+    @comments = @blog.comments
+    # ポップアップ通知をクリックすると、通知が既読になる
+    Notification.find(params[:notification_id]).update(read: true) if params[:notification_id]
+  end
 
-      # idをキーとして値を取得するメソッド
-      def set_blog
-        @blog = Blog.find(params[:id])
-      end
+  private
+    def blogs_params
+      params.require(:blog).permit(:title, :content)
+    end
+    # idをキーとして値を取得するメソッド
+    def set_blog
+    @blog = Blog.find(params[:id])
+    end
   end

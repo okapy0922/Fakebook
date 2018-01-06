@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>依頼一覧</h1>
+
+<table>
+  <thead>
+    <div = "row">
+      <!--BOOTSTRAP：prefix指定https://techacademy.jp/magazine/6270 タスクテーブルをレスポンシブデザインに-->
+      <div class="task col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12 table-responsive">
+        <!--BOOTSTRAP:画面のメニューにマウスオーバーした際に行全体の背景を灰色に変更-->
+        <table class="table table-hover">
+          <tr>
+            <th>仕事人</th>
+            <th>お仕事の依頼</th>
+            <th>メッセージ</th>
+            <th>依頼人</th>
+            <th>進捗度合い</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!--eachメソッド each doを使用しuserをユーザ名表示にさせる-->
+          <% @submit_requests.each do |submit_request| %>
+          <tr>
+            <td><%= submit_request.user.name %></td>
+            <td><%= submit_request.task.title %></td>
+            <td><%= submit_request.message %></td>
+            <td><%= submit_request.request_user_id %></td>
+            <td><%= submit_request.status %></td>
+            <td><%= link_to '詳細', submit_request %></td>
+            <td><%= link_to '編集', edit_submit_request_path(submit_request) %></td>
+            <td><%= link_to '削除', submit_request, method: :delete, data: { confirm: 'よろしいですか?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <br>
+
+      <%= link_to '新しい仕事を依頼する', new_submit_request_path %>

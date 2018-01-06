@@ -1,0 +1,25 @@
+<ul>
+  <% comments.each do |comment| %>
+    <% unless comment.id.nil? %>
+      <li id ="comment_<%= comment.id %>">
+        <p class="left"><%= comment.user.name %>さんがコメントしました。</p>
+        <p class="left"><%= comment.content %></p>
+        <% if current_user.id == comment.user.id %>
+          <p class="right">
+            <%= link_to '', [comment.blog, comment], class: "fa fa-trash-o fa-lg", method: :delete, data: { confirm: '本当に削除していいですか？',:remote => true } %>
+          </p>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+<!--ドットインストール
+#35 削除処理をAjax化しよう (1) | 【旧版】Ruby on Rails 3入門
+削除処理を画面遷移なく行えるようにAjax化していく方法を参考-->
+<script>
+$(function(){
+  $('a[data-method="delete"]').on('ajax:success', function(e, data, status, xhr) {
+    $('#comment_'+data.comment.id).fadeOut();
+  });
+ });
+ </script>
