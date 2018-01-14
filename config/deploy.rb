@@ -6,7 +6,7 @@ set :application, 'achieve'
 
 # cloneするgitのレポジトリ（xxxxxxxx：ユーザ名、yyyyyyyy：アプリケーション名）
 
-set :repo_url, 'git@github.com:okapy0922/achieve.git'
+set :repo_url, 'https://github.com/okapy0922/achieve'
 
 # deployするブランチ。デフォルトはmasterなのでなくても可。
 
