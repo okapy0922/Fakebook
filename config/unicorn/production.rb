@@ -1,3 +1,4 @@
+
 #ワーカーの数。後述
 
 $worker  = 2
@@ -22,6 +23,8 @@ $pid     = File.expand_path 'tmp/pids/unicorn.pid', $app_dir
 
 $std_log = File.expand_path 'log/unicorn.log', $app_dir
 
+
+
 # 上記で設定したものが適応されるよう定義
 
 worker_processes  $worker
@@ -38,9 +41,13 @@ listen  $listen
 
 pid $pid
 
+
+
 #ホットデプロイをするかしないかを設定
 
 preload_app true
+
+
 
 #fork前に行うことを定義。後述
 
@@ -63,6 +70,7 @@ before_fork do |server, worker|
   end
 
 end
+
 
 
 #fork後に行うことを定義。後述

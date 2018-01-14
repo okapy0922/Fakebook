@@ -46,8 +46,6 @@ Rails.application.routes.draw do
   # フォローをする、やめるの機能のルーティング（フォロー関係を作成するcreateアクションと削除するdestroyアクションへのroutingを作成）
   resources :relationships, only: [:create, :destroy]
 
-  resources :poems, only: [:index, :show]
-
   # メッセージ機能のrouting、conversations内にmessagesがネストされたものを定義
   resources :conversations do
 
