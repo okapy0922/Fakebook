@@ -1,59 +1,67 @@
-<h2>マイページ</h2>
-<div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= f.error_messages! %>
+<div class="container">
+  <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+  <h2>マイページ</h2>
 
-  <div class="field">
-    <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "メールアドレス" %>
-  </div>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= f.error_messages! %>
 
-  <!-- 名前入力用のフィールドを追加 -->
-  <div class="field">
-    <%= f.text_field :name, class: "form-control", placeholder: "名前" %>
-  </div>
+    <div class="field">
+      <%= f.label :メールアドレス %><br />
+      <%= f.email_field :email, autofocus: true, class: "form-control" %>
+    </div>
+
+    <!-- 名前入力用のフィールドを追加 -->
+    <div class="field">
+      <%= f.label :名前 %><br />
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
 
   <% if @user.provider.blank? %>
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-  Currently waiting confirmation for: <%= resource.unconfirmed_email %>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :変更後のパスワード %>※パスワード変更希望の方のみご入力ください
+      <% if @minimum_password_length %>
+      <a class="retire">半角<%= @minimum_password_length %>文字以上</a>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+    </div>
+
+      <div class="field">
+        <%= f.label :確認用パスワード %>
+        <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :現在のパスワード %> <p class="currentpass">※登録内容変更の場合は現在のパスワードを必ずご入力ください</p>
+        <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
+      </div>
+
+      <% end %>
+
+      <div class="field">
+        <div class="profileimg"><%= profile_img(@user) if profile_img(@user) %></a></div>
+        <%= f.file_field :avatar %><br>
+        <%= f.hidden_field :avatar_cache %>
+      </div>
+      <div class="actions">
+        <%= f.submit "更新する", class: "btn btn-block btn-fb" %>
+      </div>
   <% end %>
 
-  <!-- パスワード入力用のフィールドを追加 -->
-  <div class="field">
-    <%= f.label :password %> <i>(変更したくない場合は空白のままにしてください)</i><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-    <% if @minimum_password_length %>
-    <br />
-    <em><%= @minimum_password_length %> 文字以内</em>
-    <% end %>
+
+    <h4>退会は下記からお願いします</b></h4>
+
+    <p class="retire">本当に退会でよろしいですか？
+      <%= link_to "退会する", registration_path(resource_name), data: { confirm: "ほんとによろしいですか?" }, class: "btn btn-danger btn-block" %>
+    </p>
+    <p>
+      <%= link_to "戻る", :back, class: "btn btn-primary btn-block" %>
+    </p>
+
+
   </div>
-
-  <!-- プロフィール画像のフィールドを追加 -->
-  <div class="field">
-    <%= profile_img(@user) if profile_img(@user) %>
-    <%= f.file_field :avatar %>
-    <%= f.hidden_field :avatar_cache %>
-  </div>
-
-  <!-- <div class="field">
-  <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "パスワード" %>
-</div>
-<div class="field">
-<%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "パスワード（確認）" %>
-</div>
-<% end %> -->
-
-<div class="field">
-  <%= f.label :current_password %> <i>(変更を確認するために現在のパスワードが必要です)</i><br />
-  <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
-</div>
-
-<div class="actions">
-  <%= f.submit "更新する", class: "btn btn-primary btn-block" %>
-</div>
-<% end %>
-
-<!--ログアウト関係-->
-<%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
-<%= button_to "退会する", registration_path(resource_name), data: { confirm: "退会しますか?" }, method: :delete %>
-<%= link_to "Back", :back %>
 </div>

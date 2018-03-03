@@ -1,8 +1,9 @@
 // Place all the styles related to the Comments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//コメントの一覧のCSS
 ul{
-  padding: 0;
+  padding-bottom: 0;
 }
 
 .child li {
@@ -13,8 +14,16 @@ ul{
 
 .right {
 text-align: right;
-
 }
+
 .left {
 text-align: left;
+}
+
+.topic_comment_form {
+
+}
+
+.hidden_form {
+  display: none;
 }

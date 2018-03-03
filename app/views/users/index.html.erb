@@ -1,23 +1,20 @@
 <div class="container">
   <h2>ユーザー一覧</h2>
-  <% @users.each do |user| %>
   <div class="container-child col-md-2 col-sm-4 col-xs-6 ">
+    <div id="grid">
+       <% @users_without_me.each do |user| %>
+        <li class="userbox"><%= profile_img(user) %></li>
+        <li class="userbox"><%= user.name %></li>
+        <li class="userbox"><%= user.email %></li>
+        <li class="userbox"><%= render partial: 'follow_form', locals: { user: user } if signed_in? %></li>
 
-    <%= profile_img(user) %>
-    <%=link_to user.name,user_path(user.id) %>
-    <%= render 'follow_form', user: user %><!--views/users/_follow_formをusers/indexから呼び出しする-->
-  </div>
-  <!--各ユーザごとのメッセージ画面へのリンクを設定-->
-  <% if user.id != current_user.id %>
-  <li>
-    <div class="item">
-      <%= link_to user.name, user %>
-      <%= link_to 'メッセージ', conversations_path(sender_id: current_user.id, recipient_id: user.id), method: 'post'%>
+        <% if user.id != current_user.id %>
+
+      <div class="item">
+        <li class="userbox"><%= link_to 'メッセージ送信', conversations_path(sender_id: current_user.id, recipient_id: user.id), method: 'post'%></li>
+        <% end %>
+      </div>
+      <% end %>
     </div>
-    <!--サインインしているときにこの画面で自分以外のユーザへメッセージを送るリンクが表示される-->
-    <%= render partial: 'follow_form', locals: { user: user } if signed_in?   %>
-  </li>
-  <% end %>
-
-  <% end %>
+  </div>
 </div>

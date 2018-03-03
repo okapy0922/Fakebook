@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # Use postgresql as the database for Active Record
@@ -61,7 +60,6 @@ gem 'faker'
 gem 'rails_admin'
 gem 'cancan'
 group :development do
-  gem 'letter_opener_web'
   gem 'activeresource'
 end
 
@@ -71,9 +69,10 @@ end
 
 gem 'omniauth'
 gem 'omniauth-twitter'
+
+#image uploader
 gem 'carrierwave'
 gem 'rmagick'
 gem 'pusher'
-gem 'fog'
 gem 'dotenv-rails'
 gem 'unicorn'

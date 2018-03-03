@@ -1,17 +1,12 @@
 <div class="container">
   <div class="wrapper col-md-4 col-md-offset-4 col-sm-10">
-    <h2>サインアップ</h2>
+    <h2>新規登録</h2>
 
     <%= form_for(resource, as: resource_name, url: user_registration_path) do |f| %>
-    <%= f.error_messages! %>
+      <%= f.error_messages! %>
 
       <div class="field">
         <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "メールアドレス" %>
-      </div>
-
-      <!-- 名前入力用のフィールドを追加 -->
-      <div class="field">
-        <%= f.text_field :name, class: "form-control", placeholder: "名前" %>
       </div>
 
       <div class="field">
@@ -23,7 +18,7 @@
       </div>
 
       <div class="actions">
-        <%= f.submit "サインアップ", class: "btn btn-primary btn-block" %>
+        <%= f.submit "新規登録", class: "btn btn-block btn-fb" %>
       </div>
     <% end %>
 

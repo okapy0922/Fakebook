@@ -2,11 +2,11 @@ lock '3.6.0'
 
 # デプロイするアプリケーション名
 
-set :application, 'achieve'
+set :application, 'fakebook'
 
 # cloneするgitのレポジトリ（xxxxxxxx：ユーザ名、yyyyyyyy：アプリケーション名）
 
-set :repo_url, 'git@github.com:okapy0922/achieve.git'
+set :repo_url, 'git@github.com:okapy0922/fakebook.git'
 
 # deployするブランチ。デフォルトはmasterなのでなくても可。
 
@@ -14,7 +14,7 @@ set :branch, ENV['BRANCH'] || 'master'
 
 # deploy先のディレクトリ。
 
-set :deploy_to, '/var/www/achieve'
+set :deploy_to, '/var/www/fakebook'
 
 # シンボリックリンクをはるフォルダ・ファイル
 

@@ -1,2 +1,0 @@
-module SubmitRequestsHelper
-end
