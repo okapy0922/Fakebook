@@ -6,9 +6,9 @@ $worker  = 2
 
 $timeout = 30
 
-#自分のアプリケーション名「Fakebook」
+#自分のアプリケーション名「fakebook」
 
-$app_dir = "/var/www/Fakebook/current"
+$app_dir = "/var/www/fakebook/current"
 
 #リクエストを受け取るポート番号を指定。
 
