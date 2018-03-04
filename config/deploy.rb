@@ -16,7 +16,7 @@ set :branch, ENV['BRANCH'] || 'master'
 
 set :deploy_to, '/var/www/fakebook'
 
-# シンボリックリンクをはるフォルダ・ファイル
+# シンボリックリンク(ショートカットてきな)をはるフォルダ・ファイル
 
 set :linked_files, %w{.env config/secrets.yml}
 
