@@ -22,15 +22,19 @@ http://tech.machiiro.jp/entry/2016/10/31/104815
 
 ★rails　重要な3大機能　MVCモデル
 
-Model[モデル]：
+・Model[モデル]：
 Controllerの指令をもとにデータ操作を実行(ロジックを記述)
 
-View「ビュー」：
+
+・View「ビュー」：
 Controllerから渡された情報をもとにHTMLを生成する(Modelを表示)
 
-Controller「コントローラー」：
+・Controller「コントローラー」：
 データの操作、指令　中心の役割
 (Viewの入力受け取り、Modelを起動)
+
+→値の受け渡しをView
+
 
 1.最初は「V」
 画面の生成(プログラマはこの辺から作ってくイメージある)
@@ -111,7 +115,6 @@ def index
 <td><%= poem.content %></td>
 <td><%= poem.auther %></td>
 
-
 ----------------------------
 ～Railsターミナル画面のコマンド～
 
@@ -141,6 +144,9 @@ rake routes
 ★マイグレーションファイルの実行コマンド(マイグレーションファイルを読み込む)
 rake db:migrate
 
+★バージョン違いのrake aborted!
+bundle exec rake db:migrate
+
 →マイグレーションファイルは指示書の役割
 これをもとにデータベースに反映している
 
@@ -169,10 +175,14 @@ bundle install
 password = "password"
   User.create!(email: email,
 
-  password: password,
-  password_confirmation: password,
-  name: "テスト"
-               )
+                                    password: password,
+
+                                    password_confirmation: password,
+
+               name: "テスト"
+
+                                    )
+
 end
 
 ★生成コマンド
@@ -232,8 +242,6 @@ Blog.delete.all　ブログ全削除
 ■データベース接続、データベースに対して直接確認
 rails dbconsole or rails db
 
-
-
 --------------------------------------------------------------
 ■bootstrapでデザイン
 
@@ -246,8 +254,6 @@ aplication.html.erb
   <div class="col-md-3 col-sm-6"> # サイズ調整
     <div class="function-image">
       <img src="<%= asset_path "hoge.png" %>"> # 画面表示
-
-
 
 ---------------------------------------------------------------
 ■ログイン機能実装
@@ -263,7 +269,9 @@ rails generate devise user
 ④マイグレーション実行
 rake db:migrate
 
-
+初回
+テーブル作成まとめて
+rake db:create db:migrate
 
 ----------------------------------------------------------------
 ～GitHub実行コマンド～
@@ -290,8 +298,6 @@ git push [コピーしたsshプロトコルURL]
 ■GitHubの管理下から除外する
 .gitignoreに対象のファイルを記述することで、
 gitの管理下から外す事が可能
-
-
 
 ---------------------------------------------------------------
 
@@ -330,8 +336,6 @@ git push heroku master
 ■HEROKU上でrailsコンソールコマンドを実行する
 
 heroku run rails c
-
-
 
 ------------------------------------------------------------------
 用語
@@ -424,6 +428,10 @@ Contrloller
 Router
 
 
+TwitterAPI設定のURL
+https://apps.twitter.com/
+
+
 ★JSON(JavaScript Object Notation)
 APIは性質上、データのみのやり取りを行っている
 そのフォーマットとしてJSON形式が使用される
@@ -464,7 +472,8 @@ class BlogsController < ApplicationController
   end
 end
 
-binding.pryの実行例
+
+■binding.pryの実行例
 
 
 class BlogsController < ApplicationController
@@ -479,7 +488,134 @@ class BlogsController < ApplicationController
   end
 end
 
-# 新規投稿ボタンを押したら処理が止まる、リクエストをコンソールで確認
+新規投稿ボタンを押したら処理が止まる、リクエストをコンソールで
+変数の中にあるものを確認することができる
+
+
+[1] pry(#<#<Class:0x007f72a5a72028>>)>@blog
+
 @blogの中身に何が入ってるか
-@blogを実行して中身が見られる
+@blogでエンターで中身が見られる
 nilは実体なし　何もないの意味
+
+
+■GitHubからcloneしたソースコードを動かす方法
+
+・gem install bundlerを実行
+・bundle install を実行
+・rake db:migrateを実行
+・rails sを実行
+
+
+
+■よく使われるWebサーバ、アプリケーションサーバ
+
+①Webサーバ：
+Apache、nginx 、IIS（Internet Information Services）の3つが有名
+
+Webサーバは何をするのか
+
+3層構成の場合には、動的な処理が必要な場合に、アプリケーションサーバへリクエストを送り、受け取った結果をWebブラウザに返却する
+
+
+②アプリケーションサーバ：
+Javaのアプリケーションサーバ
+Tomcat、GlassFishが有名
+
+Ruby on Rails環境のアプリケーションサーバ
+Unicorn、Thin、Rainbows、Pumaが有名
+
+アプリケーションサーバは何をするのか
+
+アプリケーションサーバはWebサーバから受け取ったリクエストをもとに、Javaやphp、Rubyなどを実行し、Webサーバに結果を返却する
+
+
+■Web3層構成
+
+１．Webサーバ層
+
+Webブラウザからのアクセス要求を処理する層を示します。必要に応じて、Webアプリケーション層へリクエストを要求します。
+
+
+２．ウェブアプリケーション層
+
+Webサーバから受けたリクエストをもとに、バックエンドで動作するJavaやphp、Rubyなどを実行したり、データベースへのアクセスを行ない、処理を行ないます。
+
+
+３．データベース層
+
+入力したデータや、アプリケーションで参照するデータを保管する役割を持ちます。
+
+
+
+■oracleSQL
+
+
+SQLPlusを使う
+
+ちょっとしたコマンドを覚えておくと便利
+
+
+・環境変数とは
+
+
+export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
+export ORACLE_SID=XE
+export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh`
+export PATH=$ORACLE_HOME/bin:$PATH
+
+→exportで環境変数をセットする
+oraclehomeが立ち上がっているかどうか
+
+
+・SQLログイン
+sqlplus ユーザ名 パスワード
+
+
+自分が持っているテーブルを見る
+
+select カラム名 from テーブル名
+
+テーブル作成
+create table テーブル名(テーブルの名前、定義 データ型)
+
+データ型
+
+数字 number5
+varchar2(50)バーキャラツー
+
+
+テーブルの中身を見る
+
+desc テーブル名
+
+
+OracleのSQLplusのオリジナル
+
+columnコマンド カラムコマンド
+
+column memo format a50
+
+50桁のカラム挿入
+
+create table test1(
+id char(5),
+memo varchar2(50),
+memo2 varchar2(10),
+);
+
+
+SQLPlusを実行するディレクトリ
+
+define_editor ="vi"
+
+select * from test_tab
+
+
+freespace.sql
+
+
+テーブルのレコードを集計する
+
+
+select count(*) from テーブル名;
