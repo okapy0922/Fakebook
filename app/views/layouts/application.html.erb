@@ -8,38 +8,20 @@
 </head>
 <body>
   <header>
-    <div class="navbarall">
-      <ul class="navbarleft">
-        <li><%= link_to image_tag("fakebook_logo.png", :width => '150', :height => '100'), root_path %></li>
-        <div class="newsfeed">
-          <li class="nav_item"><%= link_to "タイムライン", topics_path %></li>
-        </div>
-        <li class="nav_item">
-          <%= link_to content_tag(:i, '', class: "fa fa-users"), users_path if user_signed_in? %>
-        </li>
-        <li class="nav_item">
-          <%= link_to conversations_path do %>
-          <i class="fa fa-envelope-o" aria-hidden="true"></i>
-          <% end %>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <% if user_signed_in? %>
-            <li class="menu"><%= link_to 'マイページ', edit_user_registration_path %></li>
-            <li class="menu"><%= link_to 'ユーザー一覧', users_path if user_signed_in? %></li>
-            <li class="menu"><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></li>
-            <% else %>
-            <li class="menu"><%= link_to 'ログイン', new_user_session_path %></li>
-            <li class="menu"><%= link_to 'サインアップ', new_user_registration_path %></li>
-            <% end %>
-          </ul>
-        </li>
-      </ul>
+    <div style="text-align:center;">
+      <%= link_to image_tag("fakebook_logo.png", size: "280x75"), root_path %>
     </div>
+    <div class="nav_item">
+      <% if user_signed_in? %>
+        <%= link_to 'ユーザ一覧', users_path if user_signed_in? %>  |
+        <%= link_to 'マイページ', edit_user_registration_path %>  |
+        <%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
+      <% end %>
+    </div>
+    </br>
   </header>
 
-<%= yield %>
+  <%= yield %>
 
 </body>
 </html>
