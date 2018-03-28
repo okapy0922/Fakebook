@@ -1,20 +1,22 @@
 <div class="container">
-  <h2>ユーザー一覧</h2>
-  <div class="container-child col-md-2 col-sm-4 col-xs-6 ">
-    <div id="grid">
-       <% @users_without_me.each do |user| %>
+  <div class="wrapper col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+    <div class="topic">
+      <p><%= notice %></p>
+      <h2>ユーザー一覧</h2>
+      <% @users_without_me.each do |user| %>
+
+      <div class="row">
+        <% if user.id != current_user.id %>
         <li class="userbox"><%= profile_img(user) %></li>
         <li class="userbox"><%= user.name %></li>
         <li class="userbox"><%= user.email %></li>
         <li class="userbox"><%= render partial: 'follow_form', locals: { user: user } if signed_in? %></li>
-        </div>
-
-        <% if user.id != current_user.id %>
-
         <div class="item">
           <li class="userbox"><%= link_to 'メッセージ送信', conversations_path(sender_id: current_user.id, recipient_id: user.id), method: 'post', class: 'btn btn-fb' %></li>
-        <% end %>
+        </div>
+
       </div>
+      <% end %>
       <% end %>
     </div>
   </div>

@@ -1,5 +1,6 @@
-<div class="wrapper col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
-  <div class="container">
+<div class="container">
+  <div class="wrapper col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+
     <div class="topic">
       <p><%= notice %></p>
       <h1>タイムライン一覧</h1>
@@ -23,11 +24,9 @@
             </p>
           </div>
 
-          <div class="row">
             <p class="topicimg">
               <%= image_tag topic.image %>
             </p>
-          </div>
         </div>
 
         <%= link_to "投稿詳細", topic_path(topic.id), class: 'btn btn-fb' %>
