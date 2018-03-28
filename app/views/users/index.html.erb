@@ -7,11 +7,12 @@
         <li class="userbox"><%= user.name %></li>
         <li class="userbox"><%= user.email %></li>
         <li class="userbox"><%= render partial: 'follow_form', locals: { user: user } if signed_in? %></li>
+        </div>
 
         <% if user.id != current_user.id %>
 
-      <div class="item">
-        <li class="userbox"><%= link_to 'メッセージ送信', conversations_path(sender_id: current_user.id, recipient_id: user.id), method: 'post', class: 'btn btn-fb' %></li>
+        <div class="item">
+          <li class="userbox"><%= link_to 'メッセージ送信', conversations_path(sender_id: current_user.id, recipient_id: user.id), method: 'post', class: 'btn btn-fb' %></li>
         <% end %>
       </div>
       <% end %>

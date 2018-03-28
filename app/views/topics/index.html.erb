@@ -1,33 +1,38 @@
-<div class="container">
-  <div class="topic">
-    <div class="wrapper col-md-8 col-md-offset-2 col-sm-10">
+<div class="col-md-2 col-md-offset-5">
+  <div class="container">
+    <div class="topic">
       <p><%= notice %></p>
       <h1>タイムライン一覧</h1>
-        <%= link_to "作成する", new_topic_path, class: 'btn btn-default' %>
+      <%= link_to "作成する", new_topic_path, class: 'btn btn-default' %>
 
       <% @topics.each do |topic| %>
-        <div class="row">
-          <div class="content">
-             <div class="topic_profile_img">
-               <%= profile_img(topic.user) %>
-               <%= topic.user.name %>
-             </div>
-             <div class="content">
-               <p class="time">
-               <%= topic.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %>
-               <p class="topic_content">
-               <%= topic.content %>
-               </p>
-               <p class="topicimg">
-               <%= image_tag topic.image %>
-               </p>
-             </div>
-            <%= link_to "投稿詳細", topic_path(topic.id), class: 'btn btn-fb' %>
-            <%= link_to "編集", edit_topic_path(topic.id), data: { confirm: '本当に編集していいですか？' } ,class: 'btn btn-fb' %>
-            <%= link_to "削除", topic_path(topic.id), method: :delete, data: { confirm: '本当に削除していいですか？'}, class: 'btn btn-danger' %>
+
+      <div class="row">
+        <div class="content">
+          <div class="topic_profile_img">
+            <%= profile_img(topic.user) %>
+            <%= topic.user.name %>
           </div>
+
+          <div class="content">
+            <p class="time">
+              <%= topic.updated_at.strftime("%Y年%m月%d日 %H:%M:%S") %>
+              <p class="topic_content">
+                <%= topic.content %>
+              </p>
+            </div>
+
+            <div class="row">
+              <p class="topicimg">
+                <%= image_tag topic.image %>
+              </p>
+            </div>
+          </div>
+          <%= link_to "投稿詳細", topic_path(topic.id), class: 'btn btn-fb' %>
+          <%= link_to "編集", edit_topic_path(topic.id), data: { confirm: '本当に編集していいですか？' } ,class: 'btn btn-fb' %>
+          <%= link_to "削除", topic_path(topic.id), method: :delete, data: { confirm: '本当に削除していいですか？'}, class: 'btn btn-danger' %>
         </div>
+      </div>
       <% end %>
     </div>
   </div>
-</div>
