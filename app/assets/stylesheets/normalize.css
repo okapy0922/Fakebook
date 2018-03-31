@@ -1,4 +1,4 @@
 img {
-	max-width: 100%;
+	max-width: 100%;/* 画像幅以上拡大しないようにする指定 */1
 	height: auto;
 }
