@@ -11,7 +11,7 @@ class ConversationsController < ApplicationController
       # 会話が過去にあった場合その会話情報を取得する
       @conversation = Conversation.between(params[:sender_id], params[:recipient_id]).first
     else
-      # 会話が一見も存在しない場合メッセージを生成する
+      # 会話が一件も存在しない場合メッセージを生成する
       @conversation = Conversation.create!(conversation_params)
     end
 

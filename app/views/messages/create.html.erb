@@ -1,2 +1,15 @@
-<h1>Messages#create</h1>
-<p>Find me in app/views/messages/create.html.erb</p>
+<p id="notice"><%= notice %></p>
+
+<%= form_for(@conversation) do |f| %>
+  <% if @message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= @message.errors.count %>件のエラーがあります。</h2>
+
+    <ul>
+      <% @message.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+    </div>
+  <% end %>
+<% end %>

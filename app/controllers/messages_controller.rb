@@ -19,10 +19,12 @@ class MessagesController < ApplicationController
   def create
     # HTTPリクエストのパラメータを利用し、会話に紐づくメッセージを生成
     @message = @conversation.messages.build(message_params)
-      # 保存ができたら会話に紐づくメッセージ一覧画面に遷移
-      if @message.save
-        redirect_to conversation_messages_path(@conversation)
-      end
+    # 保存ができたら会話に紐づくメッセージ一覧画面に遷移
+    if @message.save
+      redirect_to conversation_messages_path(@conversation)
+    else
+      render action: 'create'
+    end
   end
 
 # message_params のストロングパラメータ定義
