@@ -16,10 +16,11 @@ class User < ActiveRecord::Base
   # 「自分と「自分”が”フォローしている人」の1対多の関係性を「followed_users」という名前で定義
   has_many :followers, through: :reverse_relationships, source: :follower
   # 「自分」と「フォロワー(自分をフォローしてるひと)」の関係性を「followers」という名前で定義
+
+  # ユーザアカウントが削除されたら削除されるようにする設定、dependent: :destroy
   has_many :topics, dependent: :destroy
-  # ユーザアカウントが削除されたらタスクも削除されるようにする設定
   has_many :comments, dependent: :destroy
-  # ユーザが削除されれば紐付くタスクも削除されるようにdependent: :destroyを設定
+  has_many :messages, dependent: :destroy
 
   #フォローしているかどうかを確認する
   def following?(other_user)
